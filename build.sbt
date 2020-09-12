@@ -7,6 +7,7 @@ scalaVersion := "2.13.3"
 libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "com.typesafe" % "config" % "1.4.0"
+  "com.typesafe" % "config" % "1.4.0",
+  "org.cloudsimplus" % "cloudsim-plus" % "5.4.3"
 )
 
