@@ -2,12 +2,14 @@ import java.util
 
 import Main.config
 import com.typesafe.config.ConfigFactory
+import org.cloudbus.cloudsim.allocationpolicies.{VmAllocationPolicyBestFit, VmAllocationPolicyRoundRobin, VmAllocationPolicyWorstFit}
 import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
 import org.cloudbus.cloudsim.cloudlets.{Cloudlet, CloudletSimple}
 import org.cloudbus.cloudsim.core.CloudSim
 import org.cloudbus.cloudsim.datacenters.DatacenterSimple
 import org.cloudbus.cloudsim.hosts.{Host, HostSimple}
 import org.cloudbus.cloudsim.resources.{Pe, PeSimple}
+import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerTimeShared
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelDynamic
 import org.cloudbus.cloudsim.vms.{Vm, VmSimple}
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder
@@ -31,6 +33,8 @@ object ReducedExample extends App {
 
   //Uses a PeProvisionerSimple by default to provision PEs for VMs
   hostPes.add(new PeSimple(20000))
+  hostPes.add(new PeSimple(20000))
+  hostPes.add(new PeSimple(20000))
 
   val ram = config.getInt("PeSimple.ram").toLong //in Megabytes
   val bw = config.getInt("PeSimple.bw").toLong //in Megabytes
@@ -38,21 +42,24 @@ object ReducedExample extends App {
 
   //Uses ResourceProvisionerSimple by default for RAM and BW provisioning to provide a resource to VMs
   //Uses VmSchedulerSpaceShared by default for VM scheduling that allocates one or more PEs from a host to a Virtual Machine Monitor (VMM)
-  val host0 = new HostSimple(ram, bw, storage, hostPes)
+  val host0 = new HostSimple(10000, 10000, 10000, hostPes).setVmScheduler(new VmSchedulerTimeShared())
+  val host1 = new HostSimple(20000, 40000, 20000, hostPes)
+
   hostList.add(host0)
+  hostList.add(host1)
 
   //Creates one Datacenter with a list of Hosts
   //Uses a VmAllocationPolicySimple by default to allocate VMs
   //A VmAllocationPolicy implementation that chooses, as the host for a VM, that one with fewer PEs in use.
   //It is therefore a Worst Fit policy, allocating VMs into the host with most available PEs.
-  val dc0 = new DatacenterSimple(cloudsim, hostList)
+  val dc0 = new DatacenterSimple(cloudsim, hostList, new VmAllocationPolicyBestFit)
 
   //Creates one Vm to run applications (Cloudlets).
   val vmList = new util.ArrayList[Vm](1)
 
   //Uses a CloudletSchedulerTimeShared by default to schedule Cloudlets
-  val vm0 = new VmSimple(1000, 1)
-  vm0.setRam(1000).setBw(1000).setSize(1000)
+  val vm0 = new VmSimple(1000, 2)
+  vm0.setRam(2000).setBw(100).setSize(2000)
   vmList.add(vm0)
 
   //Creates two Cloudlets that represent applications to be run inside a Vm.
@@ -60,9 +67,10 @@ object ReducedExample extends App {
 
   //UtilizationModel defining the Cloudlets use only 50% of any resource all the time
 
-  val utilizationModel = new UtilizationModelDynamic(0.5)
+  val utilizationModel = new UtilizationModelDynamic(1)
   val cloudlet0 = new CloudletSimple(10000, 1, utilizationModel)
-  val cloudlet1 = new CloudletSimple(10000, 1, utilizationModel)
+  val cloudlet1 = new CloudletSimple(20000, 2, utilizationModel)
+  val cloudlet2 = new CloudletSimple(30000, 1, utilizationModel)
   cloudlets.add(cloudlet0)
   cloudlets.add(cloudlet1)
 
