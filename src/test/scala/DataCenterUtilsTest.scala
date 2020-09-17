@@ -60,6 +60,12 @@ class DataCenterUtilsTest extends FunSuite {
     }
     val number = simulatedHost.number
     val peList: List[Pe] = List.tabulate(simulatedHost.pesNumber) (_ => new PeSimple(simulatedHost.mips))
+
+    test("peList is created properly"){
+      assert(peList != null)
+      assert(peList.size == simulatedHost.pesNumber)
+    }
+
     var hostList: ListBuffer[Host] = new ListBuffer[Host]
     if(simulatedHost.scheduler == "time"){
       hostList = ListBuffer.tabulate(number) (_ => new HostSimple(simulatedHost.ram, simulatedHost.bw, simulatedHost.storage, peList.asJava).setVmScheduler(new VmSchedulerTimeShared()))
@@ -73,9 +79,11 @@ class DataCenterUtilsTest extends FunSuite {
 
   def createVm(): util.List[Vm] ={
     val simulatedVm = new SimulatedVm(which)
+
     test("Simulated Vm is created properly"){
       assert(simulatedVm != null)
     }
+
     val vmList: List[Vm] = List.tabulate(simulatedVm.number) (_ => {
       val vm = new VmSimple(simulatedVm.mips, simulatedVm.pes)
       vm.setRam(simulatedVm.ram).setBw(simulatedVm.bw).setSize(simulatedVm.size)
@@ -86,9 +94,11 @@ class DataCenterUtilsTest extends FunSuite {
 
   def createCloudlet() : util.List[Cloudlet] = {
     val simulatedCloudlet = new SimulatedCloudLet(which)
+
     test("Simulated Cloudlet is created properly"){
       assert(simulatedCloudlet != null)
     }
+
     val cloudletList: List[Cloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CloudletSimple(simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
     cloudletList.asJava
   }
@@ -99,6 +109,5 @@ class DataCenterUtilsTest extends FunSuite {
   configureNetwork("topology.brite", dc, broker)
   createVm()
   createCloudlet()
-
 
 }
