@@ -8,6 +8,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.typesafe" % "config" % "1.4.0",
-  "org.cloudsimplus" % "cloudsim-plus" % "5.4.3"
+  "org.cloudsimplus" % "cloudsim-plus" % "5.4.3",
+  "org.scalatest" %% "scalatest" % "3.0.8" % Test
 )
 

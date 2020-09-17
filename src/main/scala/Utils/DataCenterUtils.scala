@@ -36,17 +36,14 @@ class DataCenterUtils {
       .setCostPerMem(simulatedDataCenter.costPerMemory)
       .setCostPerSecond(simulatedDataCenter.costPerSecond)
       .setCostPerStorage(simulatedDataCenter.costPerStorage)
-    println(dc.getCharacteristics.getArchitecture)
     dc
   }
 
   def configureNetwork(NETWORK_TOPOLOGY_FILE : String, dc: Datacenter, broker: DatacenterBroker): Unit = {
-
     val networkTopology = BriteNetworkTopology.getInstance(NETWORK_TOPOLOGY_FILE)
     cloudSim.setNetworkTopology(networkTopology)
     networkTopology.mapNode(dc.getId, 0)
     networkTopology.mapNode(broker.getId, 3)
-
   }
 
   def createHost(): util.List[Host] = {
@@ -87,5 +84,4 @@ class DataCenterUtils {
     cost = List.tabulate(finishTime.size)(x => pricePerSecond(x) * finishTime(x)).sum
     cost
   }
-
 }
