@@ -24,7 +24,7 @@ class MixedSimulationTest extends FunSuite with BeforeAndAfter{
     test(simulation + "DataCenter is created properly"){
       assert(dataCenterSimple != null)
     }
-    logger.info("DataCenter is created properly for "+simulation)
+    //logger.info("DataCenter is created properly for "+simulation)
 
     val vmList: util.List[Vm] = dataCenterUtils.createVm()
 
@@ -32,7 +32,7 @@ class MixedSimulationTest extends FunSuite with BeforeAndAfter{
       assert(vmList != null)
       assert(config.getInt(simulation + ".vm.number") === vmList.size())
     }
-    logger.info("Vm list is created properly for "+simulation)
+    //logger.info("Vm list is created properly for "+simulation)
 
     val cloudletList: util.List[Cloudlet] = dataCenterUtils.createCloudlet()
 
@@ -41,13 +41,14 @@ class MixedSimulationTest extends FunSuite with BeforeAndAfter{
       assert(config.getInt(simulation + ".cloudLet.number") === cloudletList.size())
     }
 
-    logger.info("Cloudlet list is created properly for "+simulation)
+    //logger.info("Cloudlet list is created properly for "+simulation)
 
     dataCenterBrokerSimple.submitVmList(vmList).submitCloudletList(cloudletList)
 
-    logger.info(simulation + " test completed")
+    //logger.info(simulation + " test completed")
 
   }
+
   val logger: Logger = LoggerFactory.getLogger("MixedSimulationTest")
   logger.info("Starting MixedSimulationTest")
   val simulationList = List("simulation1", "simulation2", "simulation3", "simulation4")
