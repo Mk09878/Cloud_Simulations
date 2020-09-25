@@ -1,6 +1,6 @@
 import java.util
 
-import Utils.{SimulatedCloudLet, SimulatedDataCenter, SimulatedHost, SimulatedVm}
+import Utils.{CloudletPaaS, SimulatedCloudLet, SimulatedDataCenter, SimulatedDataCenterIaaS, SimulatedDataCenterPaaS, SimulatedDataCenterSaaS, SimulatedHost, SimulatedVm}
 import org.cloudbus.cloudsim.allocationpolicies.{VmAllocationPolicy, VmAllocationPolicyRoundRobin}
 import org.cloudbus.cloudsim.brokers.{DatacenterBroker, DatacenterBrokerSimple}
 import org.cloudbus.cloudsim.cloudlets.{Cloudlet, CloudletSimple}
@@ -103,11 +103,14 @@ class DataCenterUtilsTest extends FunSuite {
     cloudletList.asJava
   }
 
+
+
   cloudSim = new CloudSim()
   val broker: DatacenterBrokerSimple = createSimpleBroker(cloudSim)
   val dc: DatacenterSimple = createSimpleDataCenter("simulation1", new VmAllocationPolicyRoundRobin)
   configureNetwork("topology.brite", dc, broker)
   createVm()
   createCloudlet()
+
 
 }

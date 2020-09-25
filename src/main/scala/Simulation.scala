@@ -87,16 +87,21 @@ object Simulation extends App{
 
 
   val datacenter = new DatacenterSimple(cloudsim, hostList)
-
+  val datacenter1 = new DatacenterSimple(cloudsim, hostList)
   logger.info(datacenter.getCharacteristics.getArchitecture)
   logger.info(datacenter.getCharacteristics.getOs)
   logger.info(datacenter.getCharacteristics.getVmm)
-  val datacentertemp = new SimulatedDataCenter("simulation")
   datacenter.getCharacteristics
-            .setCostPerBw(datacentertemp.costPerBw)
-            .setCostPerMem(datacentertemp.costPerMemory)
-            .setCostPerSecond(datacentertemp.costPerSecond)
-            .setCostPerStorage(datacentertemp.costPerStorage)
+            .setCostPerBw(0.001)
+            .setCostPerMem(0.05)
+            .setCostPerSecond(5)
+            .setCostPerStorage(0.005)
+
+  datacenter1.getCharacteristics
+    .setCostPerBw(0.001)
+    .setCostPerMem(0.05)
+    .setCostPerSecond(5)
+    .setCostPerStorage(0.005)
 
 
   val vmList = new util.ArrayList[Vm](1)

@@ -1,4 +1,4 @@
-package Simulations
+package Simulations.Mixed
 
 import Utils.DataCenterUtils
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicyRoundRobin
