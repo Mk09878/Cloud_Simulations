@@ -62,7 +62,7 @@ simulation1 {
         ram = 10000
         storage = 100000
         bw = 10000
-        mips = 1000
+        mips = 2000
         scheduler = space
     }
 
