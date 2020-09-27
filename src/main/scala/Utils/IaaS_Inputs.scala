@@ -11,7 +11,7 @@ class IaaS_Inputs {
 
   val os: String = scala.io.StdIn.readLine()
 
-  logger.info("Enter number of VMs")
+  logger.info("Enter number of VMs (Less than or equal to 4)")
   val number: Int = scala.io.StdIn.readLine().toInt
 
   logger.info("Enter VM Mips (Less than or equal to 500)")

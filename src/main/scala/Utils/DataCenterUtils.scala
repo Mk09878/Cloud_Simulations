@@ -50,6 +50,7 @@ class DataCenterUtils {
       .setCostPerMem(simulatedDataCenter.costPerMemory)
       .setCostPerSecond(simulatedDataCenter.costPerSecond)
       .setCostPerStorage(simulatedDataCenter.costPerStorage)
+    logger.info("DataCenter Created")
     dc
   }
 
@@ -68,26 +69,26 @@ class DataCenterUtils {
       .setCostPerMem(simulatedDataCenter.costPerMemory)
       .setCostPerSecond(simulatedDataCenter.costPerSecond)
       .setCostPerStorage(simulatedDataCenter.costPerStorage)
+    logger.info("SaaS DataCenter Created")
     dc
   }
 
   /**
    * Creates a Simple IaaS DataCenter, assigns the os and operating costs to it
    * @param which
-   * @param os
    * @param vmAllocationPolicy
    * @return SimpleDataCenter object
    */
-  def createIaaSDataCenter(cloudSim: CloudSim, which: String, os: String, vmAllocationPolicy: VmAllocationPolicy) : DatacenterSimple = {
+  def createIaaSDataCenter(cloudSim: CloudSim, which: String, vmAllocationPolicy: VmAllocationPolicy) : DatacenterSimple = {
     this.which = which
     val simulatedDataCenter = new SimulatedDataCenterIaaS(which)
     val dc = new DatacenterSimple(cloudSim, createHost(), vmAllocationPolicy)
     dc.getCharacteristics
-      .setOs(os)
       .setCostPerBw(simulatedDataCenter.costPerBw)
       .setCostPerMem(simulatedDataCenter.costPerMemory)
       .setCostPerSecond(simulatedDataCenter.costPerSecond)
       .setCostPerStorage(simulatedDataCenter.costPerStorage)
+    logger.info("IaaS DataCenter Created")
     dc
   }
 
@@ -106,6 +107,7 @@ class DataCenterUtils {
       .setCostPerMem(simulatedDataCenter.costPerMemory)
       .setCostPerSecond(simulatedDataCenter.costPerSecond)
       .setCostPerStorage(simulatedDataCenter.costPerStorage)
+    logger.info("PaaS DataCenter Created")
     dc
   }
 
@@ -122,6 +124,7 @@ class DataCenterUtils {
     cloudSim.setNetworkTopology(networkTopology)
     networkTopology.mapNode(dc.getId, 0)
     networkTopology.mapNode(broker.getId, 3)
+    logger.info("Network Configured")
   }
 
   /**
@@ -139,7 +142,7 @@ class DataCenterUtils {
     else{
       hostList = ListBuffer.tabulate(number) (_ => new HostSimple(simulatedHost.ram, simulatedHost.bw, simulatedHost.storage, peList.asJava).setVmScheduler(new VmSchedulerSpaceShared()))
     }
-
+    logger.info("Host List Created")
     hostList.asJava
   }
 
@@ -154,6 +157,7 @@ class DataCenterUtils {
       vm.setRam(simulatedVm.ram).setBw(simulatedVm.bw).setSize(simulatedVm.size)
       vm
     })
+    logger.info("Vm List Created")
     vmList.asJava
   }
 
@@ -193,6 +197,7 @@ class DataCenterUtils {
     else{
       cloudletList = ListBuffer.tabulate(simulatedCloudlet.number) (_ => new CloudletSimple(simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
     }
+    logger.info("Cloudlet list created")
     cloudletList.asJava
   }
 
@@ -204,6 +209,27 @@ class DataCenterUtils {
     val simulatedCloudlet = new SimulatedCloudLet(which)
     val cloudletList: List[CloudletPaaS] = List.tabulate(simulatedCloudlet.number)(_ => new CloudletPaaS(language, dataStore, simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
     cloudletList.asJava
+  }
+
+  def createCustomCloudlet(service: String, number: Int): util.List[CustomCloudlet] = {
+    val simulatedCloudlet = new SimulatedCloudLet(which)
+    val cloudletList: List[CustomCloudlet] = List.tabulate(number)(_ => new CustomCloudlet(service, simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
+    cloudletList.asJava
+  }
+
+  def createCustomCloudlet1(service: String): util.List[CustomCloudlet] = {
+    val simulatedCloudlet = new SimulatedCloudLet(which)
+    val cloudletList: List[CustomCloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CustomCloudlet(service, simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
+    cloudletList.asJava
+  }
+
+  def createAllCloudlets(Lang: String, dataStore: String): util.List[CustomCloudlet] = {
+    val simulatedCloudlet = new SimulatedCloudLet(which)
+    val cloudletList1: List[CustomCloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CustomCloudlet("IaaS", simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
+    val cloudletList2: List[CustomCloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CustomCloudlet("PaaS", Lang, dataStore, simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
+    val cloudletList3: List[CustomCloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CustomCloudlet("SaaS", simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
+    logger.info("Cloudlet list created")
+    (cloudletList1 ::: cloudletList2 ::: cloudletList3).asJava
   }
 
   /**
@@ -227,6 +253,14 @@ class DataCenterUtils {
    * @return Total cost of the simulation
    */
   def costPaaS(dataCenter: Datacenter, cloudletList: util.List[CloudletPaaS]): Double = {
+    var cost: Double = 0.0
+    val pricePerSecond = cloudletList.asScala.map(x => x.getCostPerSec(dataCenter))
+    val finishTime = cloudletList.asScala.map(x => x.getFinishTime)
+    cost = List.tabulate(finishTime.size)(x => pricePerSecond(x) * finishTime(x)).sum
+    cost
+  }
+
+  def cost1(dataCenter: Datacenter, cloudletList: util.List[CustomCloudlet]): Double = {
     var cost: Double = 0.0
     val pricePerSecond = cloudletList.asScala.map(x => x.getCostPerSec(dataCenter))
     val finishTime = cloudletList.asScala.map(x => x.getFinishTime)

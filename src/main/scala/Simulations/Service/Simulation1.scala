@@ -1,6 +1,8 @@
 package Simulations.Service
 
-import Utils.{DataCenterUtils, IaaS_Inputs, PaaS_Inputs}
+import java.util
+
+import Utils.{CloudletPaaS, DataCenterUtils, IaaS_Inputs, PaaS_Inputs}
 import org.cloudbus.cloudsim.allocationpolicies._
 import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
 import org.cloudbus.cloudsim.cloudlets.Cloudlet
@@ -19,7 +21,7 @@ object Simulation1 extends App {
   /* ---- IaaS ---- */
   val IaaSInputs = new IaaS_Inputs()
   val dataCenterUtils_IaaS = new DataCenterUtils()
-  val dataCenterSimple_IaaS = dataCenterUtils_IaaS.createIaaSDataCenter(cloudSim, "models_simulation1", IaaSInputs.os, new VmAllocationPolicyRoundRobin)
+  val dataCenterSimple_IaaS = dataCenterUtils_IaaS.createIaaSDataCenter(cloudSim, "models_simulation1", new VmAllocationPolicyRoundRobin)
   val vmList_IaaS = dataCenterUtils_IaaS.createIaaSVm(IaaSInputs.number, IaaSInputs.mips, IaaSInputs.pes, IaaSInputs.ram, IaaSInputs.bw, IaaSInputs.size)
   val cloudletList_IaaS = dataCenterUtils_IaaS.createCloudlet()
   cloudletList_IaaS.asScala.map(x => x.assignToDatacenter(dataCenterSimple_IaaS))
@@ -31,7 +33,7 @@ object Simulation1 extends App {
   val dataCenterUtils_PaaS = new DataCenterUtils()
   val dataCenterSimple_PaaS = dataCenterUtils_PaaS.createPaaSDataCenter(cloudSim, "models_simulation1", new VmAllocationPolicyRoundRobin)
   val vmList_PaaS = dataCenterUtils_PaaS.createVm()
-  val cloudletList_PaaS = dataCenterUtils_PaaS.createPaaSCloudlet(PaaSInputs.lang, PaaSInputs.db)
+  val cloudletList_PaaS: util.List[CloudletPaaS] = dataCenterUtils_PaaS.createPaaSCloudlet(PaaSInputs.lang, PaaSInputs.db)
   cloudletList_PaaS.asScala.map(x => x.assignToDatacenter(dataCenterSimple_PaaS))
   logger.info(dataCenterSimple_PaaS.getCharacteristics.getOs)
   broker.submitVmList(vmList_PaaS).submitCloudletList(cloudletList_PaaS)
@@ -57,10 +59,4 @@ object Simulation1 extends App {
   logger.info("Cost for PaaS model is: " + dataCenterUtils_PaaS.costPaaS(dataCenterSimple_PaaS, cloudletList_PaaS).toString)
 
   logger.info("Cost for SaaS model is: " + dataCenterUtils_SaaS.cost(dataCenterSimple_SaaS, cloudletList_SaaS).toString)
-
-
-
-
-
-
 }

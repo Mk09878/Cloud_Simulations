@@ -23,7 +23,7 @@ class ServiceSimulationTest extends FunSuite{
 
   /* ---- IaaS ---- */
   val dataCenterUtils_IaaS = new DataCenterUtils()
-  val dataCenterSimple_IaaS: DatacenterSimple = dataCenterUtils_IaaS.createIaaSDataCenter(cloudSim, "models_simulation1", "Linux", new VmAllocationPolicyRoundRobin)
+  val dataCenterSimple_IaaS: DatacenterSimple = dataCenterUtils_IaaS.createIaaSDataCenter(cloudSim, "models_simulation1", new VmAllocationPolicyRoundRobin)
   test( "DataCenter IaaS is created properly"){
     assert(dataCenterSimple_IaaS != null)
   }
