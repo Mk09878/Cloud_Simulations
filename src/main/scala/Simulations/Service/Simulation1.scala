@@ -28,6 +28,9 @@ object Simulation1 extends App {
   val IaaSInputs = new IaaS_Inputs()
   val PaaSInputs = new PaaS_Inputs()
 
+  // Assigning th os
+  dataCenterSimple_IaaS.getCharacteristics.setOs(IaaSInputs.os)
+
   // Creating VMs
   val vmList1 = dataCenterUtils.createIaaSVm(IaaSInputs.number, IaaSInputs.mips, IaaSInputs.pes, IaaSInputs.ram, IaaSInputs.bw, IaaSInputs.size)
   val vmList2 = dataCenterUtils.createVm()
