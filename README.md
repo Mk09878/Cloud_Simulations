@@ -83,9 +83,9 @@ simulation1 {
     }
 
     cloudLet = {
-        number = 10
+        number = 20
         length = 20000
-        pesNumber = 2
+        pesNumber = 4
         utilizationModel = Full
     }
 }
