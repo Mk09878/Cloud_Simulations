@@ -2,6 +2,7 @@ package Utils
 
 import org.cloudbus.cloudsim.cloudlets.CloudletSimple
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModel
+
 import org.slf4j.{Logger, LoggerFactory}
 
 class CustomCloudlet(which: String, lang: String, dataStore: String, length: Int, pesNumber: Int, model: UtilizationModel) extends CloudletSimple(length: Int, pesNumber: Int, model: UtilizationModel){

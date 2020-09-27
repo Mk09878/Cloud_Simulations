@@ -1,6 +1,6 @@
 import java.util
 
-import Utils.{CloudletPaaS, SimulatedCloudLet, SimulatedDataCenterIaaS, SimulatedDataCenterPaaS, SimulatedDataCenterSaaS, SimulatedHost}
+import Utils.{CustomCloudlet, SimulatedCloudLet, SimulatedDataCenterIaaS, SimulatedDataCenterPaaS, SimulatedDataCenterSaaS, SimulatedHost}
 import org.cloudbus.cloudsim.allocationpolicies.{VmAllocationPolicy, VmAllocationPolicyRoundRobin}
 import org.cloudbus.cloudsim.core.CloudSim
 import org.cloudbus.cloudsim.datacenters.DatacenterSimple
@@ -18,9 +18,9 @@ class DataCenterUtilsServicesTest extends FunSuite{
   var which: String = _
 
   /**
-   * Creates a Simple DataCenter, assigns operating costs to it
-   * @param which
-   * @param vmAllocationPolicy
+   * Creates a SaaS (Same as Simple) DataCenter and assigns operating costs to it
+   * @param which: Simulation Number
+   * @param vmAllocationPolicy: Allocation Policy for the Vm of the DataCenter
    * @return SimpleDataCenter object
    */
   def createSaaSDataCenter(cloudSim: CloudSim, which: String, vmAllocationPolicy: VmAllocationPolicy): DatacenterSimple = {
@@ -39,10 +39,9 @@ class DataCenterUtilsServicesTest extends FunSuite{
   }
 
   /**
-   * Creates a Simple IaaS DataCenter, assigns the os and operating costs to it
-   * @param which
-   * @param os
-   * @param vmAllocationPolicy
+   * Creates a IaaS DataCenter, assigns the os and operating costs to it
+   * @param which: Simulation Number
+   * @param vmAllocationPolicy: Allocation Policy for the Vm of the DataCenter
    * @return SimpleDataCenter object
    */
   def createIaaSDataCenter(cloudSim: CloudSim, which: String, os: String, vmAllocationPolicy: VmAllocationPolicy) : DatacenterSimple = {
@@ -62,9 +61,9 @@ class DataCenterUtilsServicesTest extends FunSuite{
   }
 
   /**
-   * Creates a PaaS DataCenter, assigns operating costs to it
-   * @param which
-   * @param vmAllocationPolicy
+   * Creates a PaaS DataCenter and assigns operating costs to it
+   * @param which: Simulation Number
+   * @param vmAllocationPolicy: Allocation Policy for the Vm of the DataCenter
    * @return SimpleDataCenter object
    */
   def createPaaSDataCenter(cloudSim: CloudSim, which: String, vmAllocationPolicy: VmAllocationPolicy): DatacenterSimple = {
@@ -82,6 +81,10 @@ class DataCenterUtilsServicesTest extends FunSuite{
     dc
   }
 
+  /**
+   * Creates a list of hosts based on the specified parameters in the config file
+   * @return List of Host
+   */
   def createHost(): util.List[Host] = {
     val simulatedHost = new SimulatedHost(which)
     val number = simulatedHost.number
@@ -98,26 +101,27 @@ class DataCenterUtilsServicesTest extends FunSuite{
     hostList.asJava
   }
 
-
   /**
-   * Creates a list of PaaS Cloudlets based on the specified parameters in the config file and the user input
-   * @return List of Cloudlet
+   * @param Lang: Language for PaaS Implementation
+   * @param dataStore: DataStore for PaaS Implementation
+   * @return List of Custom Cloudlets
    */
-  def createPaaSCloudlet(language: String, dataStore: String) : util.List[CloudletPaaS] = {
+  def createAllCloudlets(Lang: String, dataStore: String): util.List[CustomCloudlet] = {
     val simulatedCloudlet = new SimulatedCloudLet(which)
-
-    test("Simulated Cloudlet is created properly"){
+    test("SimulatedCloudlet created properly"){
       assert(simulatedCloudlet != null)
     }
-
-    val cloudletList: List[CloudletPaaS] = List.tabulate(simulatedCloudlet.number)(_ => new CloudletPaaS(language, dataStore, simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
-    cloudletList.asJava
+    val cloudletList1: List[CustomCloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CustomCloudlet("IaaS", simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
+    val cloudletList2: List[CustomCloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CustomCloudlet("PaaS", Lang, dataStore, simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
+    val cloudletList3: List[CustomCloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CustomCloudlet("SaaS", simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
+    (cloudletList1 ::: cloudletList2 ::: cloudletList3).asJava
   }
 
   val cloudSim = new CloudSim()
   val saas_dc: DatacenterSimple = createSaaSDataCenter(cloudSim, "models_simulation1", new VmAllocationPolicyRoundRobin)
   val paas_dc: DatacenterSimple = createPaaSDataCenter(cloudSim, "models_simulation1", new VmAllocationPolicyRoundRobin)
   val iaas_dc: DatacenterSimple = createIaaSDataCenter(cloudSim, "models_simulation1", "Linux", new VmAllocationPolicyRoundRobin)
-  createPaaSCloudlet("Scala", "mySql")
+  createAllCloudlets("Scala", "mySQL")
+
 
 }

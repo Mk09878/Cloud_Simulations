@@ -10,9 +10,10 @@ import org.cloudbus.cloudsim.datacenters.{Datacenter, DatacenterSimple}
 import org.cloudbus.cloudsim.hosts.{Host, HostSimple}
 import org.cloudbus.cloudsim.network.topologies.BriteNetworkTopology
 import org.cloudbus.cloudsim.resources.{Pe, PeSimple}
-import org.cloudbus.cloudsim.schedulers.vm.{VmScheduler, VmSchedulerSpaceShared, VmSchedulerTimeShared}
+import org.cloudbus.cloudsim.schedulers.vm.{VmSchedulerSpaceShared, VmSchedulerTimeShared}
 import org.cloudbus.cloudsim.utilizationmodels._
 import org.cloudbus.cloudsim.vms.{Vm, VmSimple}
+
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable.ListBuffer
@@ -24,10 +25,9 @@ class DataCenterUtils {
   var which: String = _
   var cloudSim: CloudSim = _
 
-
   /**
    * Creates a SimpleBroker object
-   * @param cloudSim
+   * @param cloudSim: CloudSim object
    * @return SimpleBroker object
    */
   def createSimpleBroker(cloudSim: CloudSim): DatacenterBrokerSimple = {
@@ -36,9 +36,9 @@ class DataCenterUtils {
   }
 
   /**
-   * Creates a Simple DataCenter, assigns operating costs to it
-   * @param which
-   * @param vmAllocationPolicy
+   * Creates a Simple DataCenter and assigns operating costs to it
+   * @param which: Simulation Number
+   * @param vmAllocationPolicy: Allocation Policy for the Vm of the DataCenter
    * @return SimpleDataCenter object
    */
   def createSimpleDataCenter(which: String, vmAllocationPolicy: VmAllocationPolicy): DatacenterSimple = {
@@ -55,9 +55,9 @@ class DataCenterUtils {
   }
 
   /**
-   * Creates a Simple DataCenter, assigns operating costs to it
-   * @param which
-   * @param vmAllocationPolicy
+   * Creates a SaaS (Same as Simple) DataCenter and assigns operating costs to it
+   * @param which: Simulation Number
+   * @param vmAllocationPolicy: Allocation Policy for the Vm of the DataCenter
    * @return SimpleDataCenter object
    */
   def createSaaSDataCenter(cloudSim: CloudSim, which: String, vmAllocationPolicy: VmAllocationPolicy): DatacenterSimple = {
@@ -74,9 +74,9 @@ class DataCenterUtils {
   }
 
   /**
-   * Creates a Simple IaaS DataCenter, assigns the os and operating costs to it
-   * @param which
-   * @param vmAllocationPolicy
+   * Creates a IaaS DataCenter, assigns the os and operating costs to it
+   * @param which: Simulation Number
+   * @param vmAllocationPolicy: Allocation Policy for the Vm of the DataCenter
    * @return SimpleDataCenter object
    */
   def createIaaSDataCenter(cloudSim: CloudSim, which: String, vmAllocationPolicy: VmAllocationPolicy) : DatacenterSimple = {
@@ -93,9 +93,9 @@ class DataCenterUtils {
   }
 
   /**
-   * Creates a PaaS DataCenter, assigns operating costs to it
-   * @param which
-   * @param vmAllocationPolicy
+   * Creates a PaaS DataCenter and assigns operating costs to it
+   * @param which: Simulation Number
+   * @param vmAllocationPolicy: Allocation Policy for the Vm of the DataCenter
    * @return SimpleDataCenter object
    */
   def createPaaSDataCenter(cloudSim: CloudSim, which: String, vmAllocationPolicy: VmAllocationPolicy): DatacenterSimple = {
@@ -111,13 +111,11 @@ class DataCenterUtils {
     dc
   }
 
-
-
   /**
    * Sets the network topology
-   * @param NETWORK_TOPOLOGY_FILE
-   * @param dc
-   * @param broker
+   * @param NETWORK_TOPOLOGY_FILE: Name of the topology file
+   * @param dc: DataCenter object
+   * @param broker: Broker object
    */
   def configureNetwork(NETWORK_TOPOLOGY_FILE : String, dc: Datacenter, broker: DatacenterBroker): Unit = {
     val networkTopology = BriteNetworkTopology.getInstance(NETWORK_TOPOLOGY_FILE)
@@ -161,16 +159,6 @@ class DataCenterUtils {
     vmList.asJava
   }
 
-  /*def createCustomVm(service: String): util.List[CustomVm] ={
-    val simulatedVm = new SimulatedVm(which)
-    val vmList: List[CustomVm] = List.tabulate(simulatedVm.number) (_ => {
-      val vm = new CustomVm(service, simulatedVm.mips, simulatedVm.pes)
-      vm.setRam(simulatedVm.ram).setBw(simulatedVm.bw).setSize(simulatedVm.size)
-      vm
-    })
-    vmList.asJava
-  }*/
-
   /**
    * Creates a list of IaaS Vms based on the user input
    * @return List of Vm
@@ -181,12 +169,13 @@ class DataCenterUtils {
       vm.setRam(ram).setBw(bw).setSize(size)
       vm
     })
+    logger.info("Vm List Created")
     vmList.asJava
   }
 
   /**
    * Creates a list of Cloudlets based on the specified parameters in the config file
-   * @return List of Cloudlet
+   * @return List of Cloudlets
    */
   def createCloudlet() : util.List[Cloudlet] = {
     val simulatedCloudlet = new SimulatedCloudLet(which)
@@ -202,27 +191,10 @@ class DataCenterUtils {
   }
 
   /**
-   * Creates a list of PaaS Cloudlets based on the specified parameters in the config file and the user input
-   * @return List of Cloudlet
+   * @param Lang: Language for PaaS Implementation
+   * @param dataStore: DataStore for PaaS Implementation
+   * @return List of Custom Cloudlets
    */
-  def createPaaSCloudlet(language: String, dataStore: String) : util.List[CloudletPaaS] = {
-    val simulatedCloudlet = new SimulatedCloudLet(which)
-    val cloudletList: List[CloudletPaaS] = List.tabulate(simulatedCloudlet.number)(_ => new CloudletPaaS(language, dataStore, simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
-    cloudletList.asJava
-  }
-
-  def createCustomCloudlet(service: String, number: Int): util.List[CustomCloudlet] = {
-    val simulatedCloudlet = new SimulatedCloudLet(which)
-    val cloudletList: List[CustomCloudlet] = List.tabulate(number)(_ => new CustomCloudlet(service, simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
-    cloudletList.asJava
-  }
-
-  def createCustomCloudlet1(service: String): util.List[CustomCloudlet] = {
-    val simulatedCloudlet = new SimulatedCloudLet(which)
-    val cloudletList: List[CustomCloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CustomCloudlet(service, simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
-    cloudletList.asJava
-  }
-
   def createAllCloudlets(Lang: String, dataStore: String): util.List[CustomCloudlet] = {
     val simulatedCloudlet = new SimulatedCloudLet(which)
     val cloudletList1: List[CustomCloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CustomCloudlet("IaaS", simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
@@ -233,9 +205,9 @@ class DataCenterUtils {
   }
 
   /**
-   * Calculates the total cost of running the simulation on the specified datacenter
-   * @param dataCenter
-   * @param cloudletList
+   * Calculates the total cost of running the simulation on a datacenter with default cloudlets
+   * @param dataCenter: dataCenter object
+   * @param cloudletList: List of cloudlets
    * @return Total cost of the simulation
    */
   def cost(dataCenter: Datacenter, cloudletList: util.List[Cloudlet]) : Double = {
@@ -247,19 +219,11 @@ class DataCenterUtils {
   }
 
   /**
-   * Calculates the total cost of running the simulation on the FaaS datacenter
-   * @param dataCenter
-   * @param cloudletList
+   * Calculates the total cost of running the simulation on a datacenter with Custom Cloudlet
+   * @param dataCenter: dataCenter object
+   * @param cloudletList: List of custom cloudlets
    * @return Total cost of the simulation
    */
-  def costPaaS(dataCenter: Datacenter, cloudletList: util.List[CloudletPaaS]): Double = {
-    var cost: Double = 0.0
-    val pricePerSecond = cloudletList.asScala.map(x => x.getCostPerSec(dataCenter))
-    val finishTime = cloudletList.asScala.map(x => x.getFinishTime)
-    cost = List.tabulate(finishTime.size)(x => pricePerSecond(x) * finishTime(x)).sum
-    cost
-  }
-
   def cost1(dataCenter: Datacenter, cloudletList: util.List[CustomCloudlet]): Double = {
     var cost: Double = 0.0
     val pricePerSecond = cloudletList.asScala.map(x => x.getCostPerSec(dataCenter))
@@ -267,4 +231,5 @@ class DataCenterUtils {
     cost = List.tabulate(finishTime.size)(x => pricePerSecond(x) * finishTime(x)).sum
     cost
   }
+
 }

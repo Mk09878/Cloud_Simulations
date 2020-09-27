@@ -12,7 +12,7 @@ import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.slf4j.{Logger, LoggerFactory}
 
 
-class MixedSimulationTest extends FunSuite with BeforeAndAfter{
+class MixedSimulationTest extends FunSuite{
 
   def simulation(simulation: String): Unit ={
     val config = ConfigFactory.load(simulation)
@@ -54,15 +54,5 @@ class MixedSimulationTest extends FunSuite with BeforeAndAfter{
   val simulationList = List("simulation1", "simulation2", "simulation3", "simulation4")
   simulationList.map(x => simulation(x))
   logger.info("Finished MixedSimulationTest")
-
-
-
-
-
-
-
-
-
-
 
 }

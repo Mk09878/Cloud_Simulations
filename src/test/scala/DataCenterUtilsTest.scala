@@ -1,6 +1,6 @@
 import java.util
 
-import Utils.{CloudletPaaS, SimulatedCloudLet, SimulatedDataCenter, SimulatedDataCenterIaaS, SimulatedDataCenterPaaS, SimulatedDataCenterSaaS, SimulatedHost, SimulatedVm}
+import Utils.{SimulatedCloudLet, SimulatedDataCenter, SimulatedDataCenterIaaS, SimulatedDataCenterPaaS, SimulatedDataCenterSaaS, SimulatedHost, SimulatedVm}
 import org.cloudbus.cloudsim.allocationpolicies.{VmAllocationPolicy, VmAllocationPolicyRoundRobin}
 import org.cloudbus.cloudsim.brokers.{DatacenterBroker, DatacenterBrokerSimple}
 import org.cloudbus.cloudsim.cloudlets.{Cloudlet, CloudletSimple}
@@ -102,8 +102,6 @@ class DataCenterUtilsTest extends FunSuite {
     val cloudletList: List[Cloudlet] = List.tabulate(simulatedCloudlet.number)(_ => new CloudletSimple(simulatedCloudlet.length, simulatedCloudlet.pesNumber, new UtilizationModelFull()))
     cloudletList.asJava
   }
-
-
 
   cloudSim = new CloudSim()
   val broker: DatacenterBrokerSimple = createSimpleBroker(cloudSim)

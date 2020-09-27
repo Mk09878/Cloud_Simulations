@@ -3,12 +3,13 @@ package Utils
 import org.slf4j.{Logger, LoggerFactory}
 
 class IaaS_Inputs {
+
   val logger: Logger = LoggerFactory.getLogger("IaaS_Inputs")
 
   logger.info("---- IaaS  ----")
+
   logger.info("Select OS")
   logger.info("\n1. Windows\n2. Linux\n3. macOS")
-
   val os: String = scala.io.StdIn.readLine()
 
   logger.info("Enter number of VMs (Less than or equal to 4)")
