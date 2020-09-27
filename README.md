@@ -139,6 +139,7 @@ simulation2 {
     }
 
     dataCenter = {
+        os = Linux
         cost = 5
         costPerMemory = 0.05
         costPerStorage = 0.005
@@ -505,10 +506,11 @@ INFO  Cost for SaaS model is: 41620.04000000001
 3. Simulations 3 and 2 have the same parameters except one, the scheduler. Simulation 2 uses a space shared vm scheduler whereas Simulation 3 uses a time shared vm scheduler.
 4. We can observe that Simulation 3 is less costly as compared to Simulation 2. This is because, Time shared policy allows sharing of PEs by multiple VMs as opposed to Space shared policy. 
 5. In both the simulations 2 and 3, the total number of PEs in all Vms are 4 * 4 = 16 whereas the number of PEs needed by all the cloudlets are 10*4 = 40. So, there is a significant difference and due to the sharing of VMs in the Time shared policy, the cost incurred is less.
-6. Since, time shared policy worked better in general, I used it for Simulation 4 and 5.
-7. In Simulation 4, brite network topology is used. We can observe that the costs incurred are more in this case which is expected given that it is used to simulate delays.
-8. The parameters of Simulation 5 are similar to Simulation 3 except the UtilizationModel of cloudlets. Simulation 5 uses a stochastic utilization model whereas 3 uses a full utilization model. 
-9. Simulation 5 incurs higher cost due to the randomness in the model.
+6. So, in such cases of difference, Time shared policy tends to work better.
+7. Since, Time shared policy worked better in general, I used it for Simulation 4 and 5.
+8. In Simulation 4, brite network topology is used. We can observe that the costs incurred are more in this case which is expected given that it is used to simulate delays.
+9. The parameters of Simulation 5 are similar to Simulation 3 except the UtilizationModel of cloudlets. Simulation 5 uses a stochastic utilization model whereas 3 uses a full utilization model. 
+10. Simulation 5 incurs higher cost due to the randomness in the model. So, Full UtilizationModel would work better in general unless some excellent seed value is provided to the Stochastic Model.
 
 #### Services Simulation
 1. As expected from the pricing criteria defined, the IaaS service costs the highest followed by the PaaS and SaaS service.
