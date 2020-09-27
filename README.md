@@ -399,6 +399,25 @@ INFO  Cost for simulation 5 is: 26459.988985607597
 
 #### Simulation 1
 
+The inputs used in this simulation are:
+
+```
+--- IaaS Inputs ---
+OS: Linux
+Number of VMs: 4
+Mips: 500
+PeS: 4
+RAM: 10000
+Bandwidth: 10000
+Size: 10000
+```
+
+```
+--- PaaS Inputs ---
+Language: Scala
+DataStore: mySQL
+```
+
 The configuration used in this simulation is:
 
 ```
