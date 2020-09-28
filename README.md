@@ -16,6 +16,14 @@
 1. Open IntelliJ, Click on open project and then select mihir_kelkar_hw1
 2. If no run configuration appears by default, click on the green arrow on the left of the ```object simulationx extends App``` for whichever simulation you want to run
 
+## Project Structure
+1. The Resources folder consists of the configuration files needed for the simulations.
+2. The Scala folder consists of two subfolders: Simulations and Utils.
+3. The Simulations folder again consists of two subfolders: Mixed and Service.
+4. The Mixed folder consists of 5 simulations which implement the first four tasks.
+5. The Service folder consists of a simulation which implements the fifth task.
+6. The Utils folder consists of helper classes which are required to run the simulations.
+ 
 ## VmAllocation Policies Compared:
 1. ***VmAllocationPolicyBestFit***: A VmAllocationPolicy implementation that chooses, as the host for a VM, that one with the most PEs in use. It is therefore a Best Fit policy, allocating each VM into the host with the least available PEs that are enough for the VM.
 2. ***VmAllocationPolicyFirstFit***: An First Fit VM allocation policy which finds the first Host having suitable resources to place a given VM.
