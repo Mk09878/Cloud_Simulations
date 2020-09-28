@@ -191,6 +191,7 @@ class DataCenterUtils {
   }
 
   /**
+   * Creates cloudlets of all the services and returns those in a list
    * @param Lang: Language for PaaS Implementation
    * @param dataStore: DataStore for PaaS Implementation
    * @return List of Custom Cloudlets

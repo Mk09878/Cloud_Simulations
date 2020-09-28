@@ -9,6 +9,7 @@ import java.util
 class CustomBroker(cloudSim: CloudSim) extends DatacenterBrokerSimple(cloudSim: CloudSim){
 
   /**
+   * Separates the Cloudlets based on their services
    * @param dcIaaS: IaaS DataCenter object
    * @param dcPaaS: PaaS DataCenter object
    * @param dcSaaS: SaaS DataCenter object
