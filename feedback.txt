@@ -1,0 +1,9 @@
+Hi Mihir,
+
+Good job with your simulations
+
+Your grade for HW1 is 13%.
+
+1. +3%: For building your simulations using functional Scala.
+
+Abhijeet
